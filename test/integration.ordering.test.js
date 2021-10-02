@@ -1,6 +1,6 @@
 import { assert, assertEquals } from "https://deno.land/std/testing/asserts.ts";
 
-import { testSuite } from "../lib/testSuite.js";
+import { testSuite } from "../lib/testSuite.ts";
 
 const { it, xit, test, describe, context, run, suite } = testSuite();
 

@@ -1,17 +1,16 @@
-import { TestSetupFunction } from "./types.ts";
+import { TestSetupFunction, TestOptions } from "./types.ts";
 import { backspaces, indentName } from "./printing.ts";
 
 export class Test {
   name: string;
   fn: TestSetupFunction;
-  // deno-lint-ignore no-explicit-any
-  options: Record<string, any>;
+  options: TestOptions;
   level: number;
 
   constructor(
     name: string,
     fn: TestSetupFunction,
-    options: Record<string, any>,
+    options: TestOptions,
     level: number,
   ) {
     this.name = name;
