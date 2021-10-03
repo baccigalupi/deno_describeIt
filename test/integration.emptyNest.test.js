@@ -1,7 +1,7 @@
 import { assert, assertEquals } from "https://deno.land/std/testing/asserts.ts";
 import { testSuite } from "../lib/testSuite.ts";
 
-const { it, describe, suite } = testSuite();
+const { it, describe, suite, run } = testSuite();
 
 describe("Outer description", () => {
   describe("Layer 1", () => {
@@ -13,13 +13,13 @@ describe("Outer description", () => {
   });
 });
 
-Deno.test('empty nest have the right setup of contexts', () => {
+Deno.test("empty nest have the right setup of contexts", () => {
   let contexts = suite.contexts;
   assertEquals(contexts.length, 1);
   assertEquals(contexts[0].name, "Outer description");
   assertEquals(contexts[0].level, 0);
 
-  contexts = suite.contexts[0].contexts
+  contexts = suite.contexts[0].contexts;
   assertEquals(contexts.length, 1);
   assertEquals(contexts[0].name, "Layer 1");
   assertEquals(contexts[0].level, 1);
@@ -29,11 +29,24 @@ Deno.test('empty nest have the right setup of contexts', () => {
   assertEquals(contexts[0].name, "Layer 2");
   assertEquals(contexts[0].level, 2);
 
-  contexts = suite.contexts[0].contexts[0].contexts[0].contexts
+  contexts = suite.contexts[0].contexts[0].contexts[0].contexts;
   assertEquals(contexts.length, 0);
 });
 
-Deno.test('empty nests put the test in the right place', () => {
+Deno.test("empty nests put the test in the right place", () => {
   assertEquals(suite.contexts[0].contexts[0].contexts[0].tests.length, 1);
-  assertEquals(suite.contexts[0].contexts[0].contexts[0].tests[0].name, "test description");
+  assertEquals(
+    suite.contexts[0].contexts[0].contexts[0].tests[0].name,
+    "test description",
+  );
+});
+
+Deno.test("context descriptions know how to aggregate descriptions above them that have no tests", () => {
+  const context = suite.contexts[0].contexts[0].contexts[0];
+  assertEquals(
+    context.selfAndParentDescription().trim(),
+    `Outer description
+  Layer 1
+    Layer 2`,
+  );
 });

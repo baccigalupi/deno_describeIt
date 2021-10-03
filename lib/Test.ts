@@ -1,4 +1,4 @@
-import { TestSetupFunction, TestOptions } from "./types.ts";
+import { TestOptions, TestSetupFunction } from "./types.ts";
 import { backspaces, indentName } from "./printing.ts";
 
 export class Test {
@@ -19,7 +19,7 @@ export class Test {
     this.level = level;
   }
 
-  printedName(contextPrefix: string): string {
+  description(contextPrefix: string): string {
     const name = indentName(this.name, this.level);
     return `${backspaces}${contextPrefix}${name}`;
   }
@@ -27,7 +27,7 @@ export class Test {
   run(contextPrefix: string): MaybeAsync {
     return Deno.test({
       ...this.options,
-      name: this.printedName(contextPrefix),
+      name: this.description(contextPrefix),
       fn: this.fn,
     });
   }
